@@ -22,7 +22,7 @@ public class MenuPrincipal extends JFrame {
     private JButton MiCuenta;
     private JButton Reportes;
     private JButton LogOut;
-    
+
     private GuardarPlayers guardarplayers;
 
     private static final int MAX_JUGADORES = 100;
@@ -32,8 +32,7 @@ public class MenuPrincipal extends JFrame {
     private static User[] Jugadores = new User[MAX_JUGADORES];
 
     public MenuPrincipal() {
-        
-        
+
         setTitle("Menu Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -83,6 +82,8 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                MostrarMiCuenta();
+                
             }
         });
 
@@ -124,56 +125,58 @@ public class MenuPrincipal extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
 
-                // condiciion aqui, donde se verifica la cantidad de jugadores para iniciar una nueva partida
-                if (numJugadores <= 1) {
+                if (numJugadores > 1) {
+                    String[] nombresDeJugadores = new String[numJugadores - 1];
+                    int index = 0;
 
-                    int respuesta = JOptionPane.showConfirmDialog(MenuPrincipal.this, "No hay suficientes jugadores para iniciar la partida. ¿Desea crear otro jugador?", "Falta jugadores", JOptionPane.YES_OPTION);
+                    // for que recorre los nombres de los usuarios
+                    for (int nameJuga = 0; nameJuga < numJugadores; nameJuga++) {
+                        if (!Jugadores[nameJuga].getNombre().equals(JugadorLogueado.getNombre())) {
+                            nombresDeJugadores[index++] = Jugadores[nameJuga].getNombre();
+                        }
+                    }
 
-                    if (respuesta == JOptionPane.YES_OPTION) {
+                    // Aquí se selecciona el oponente
+                    String OponenteSeleccionar = (String) JOptionPane.showInputDialog(
+                            MenuPrincipal.this,
+                            "Selecciona un oponente",
+                            "Seleccionar un oponente",
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            nombresDeJugadores,
+                            nombresDeJugadores[0]
+                    );
 
-                        CrearPlayer nuevoJugador = new CrearPlayer(guardarplayers);
+                    if (OponenteSeleccionar == null) {
+                        return;
+                    }
 
+                    // Se busca el oponente seleccionado
+                    User oponente = null;
+                    for (int buscar = 0; buscar < numJugadores; buscar++) {
+                        if (Jugadores[buscar].getNombre().equals(OponenteSeleccionar)) {
+                            oponente = Jugadores[buscar];
+                            break;
+                        }
+                    }
+
+                    if (oponente != null) {
+                        // IniciarPartida(frame, JugadorLogueado, oponente); // HACER ESTA FUNCION
                     } else {
-                        JOptionPane.showMessageDialog(MenuPrincipal.this, "No se puede iniciar la partida sin otro jugador.");
+                        JOptionPane.showMessageDialog(MenuPrincipal.this, "Oponente no válido");
                     }
 
-                }
-
-                // aqui creo un array de nombres de jugadores que no incluyen al jugador logueado
-                String[] nombresDeJugadores = new String[numJugadores - 1];
-                int index = 0;
-                // for que recorre los nombres de los usuarios
-                for (int nameJuga = 0; nameJuga < numJugadores; nameJuga++) {
-
-                    if (!Jugadores[nameJuga].getNombre().equals(JugadorLogueado.getNombre())) {
-                        nombresDeJugadores[index++] = Jugadores[nameJuga].getNombre();
-                    }
-
-                }
-
-                // aqui un cuadrito para seleccionar a un oponente 
-                String OponenteSeleccionar = (String) JOptionPane.showInputDialog(MenuPrincipal.this, "Selecciona un oponente", "Seleccionar un oponente", JOptionPane.QUESTION_MESSAGE, null, nombresDeJugadores, nombresDeJugadores[0]);
-
-                // aqui se verifica si el jugador selecciono un oponente en la lista de jugadores 
-                if (OponenteSeleccionar == null) {
-                    // RECORDATORIOOOO
-                    return;
-                }
-
-                // aqui busca el oponente seleccionado en la lista de Jugadores 
-                User oponente = null;
-                for (int buscar = 0; buscar < numJugadores; buscar++) {
-                    if (Jugadores[buscar].getNombre().equals(OponenteSeleccionar)) {
-                        oponente = Jugadores[buscar];
-                        break;
-                    }
-                }
-
-                // aqui se verifica si el oponetne es valido 
-                if (oponente != null) {
-                    //IniciarPartida(frame, JugadorLogueado, oponente); HACER ESTA FUNCION
                 } else {
-                    JOptionPane.showMessageDialog(MenuPrincipal.this, "Oponente no Valido");
+                    JOptionPane.showMessageDialog(MenuPrincipal.this, "No hay suficientes jugadores para iniciar una partida.");
+                    int respuesta = JOptionPane.showConfirmDialog(MenuPrincipal.this, "Desea crear otro jugador?","Faltan jugadores",JOptionPane.YES_OPTION);
+                    
+                    if(respuesta == JOptionPane.YES_OPTION){
+                        CrearPlayer crear = new CrearPlayer(guardarplayers);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(MenuPrincipal.this, "No es posible iniciar la partida sin otro jugador","Error",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    
                 }
 
             }
@@ -210,7 +213,14 @@ public class MenuPrincipal extends JFrame {
         this.repaint();
 
     }
-
-   
+    
+    public void MostrarMiCuenta(){
+        
+        
+        this.getContentPane().removeAll();
+        this.setSize(800, 600);
+        
+        
+    }
 
 }
