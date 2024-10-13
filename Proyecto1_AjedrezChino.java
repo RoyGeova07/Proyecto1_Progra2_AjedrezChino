@@ -15,7 +15,8 @@ public class Proyecto1_AjedrezChino {
      */
     public static void main(String[] args) {
 
-        // llamado al main 
+        MenuInicio menu = new MenuInicio();
+        menu.setLocationRelativeTo(null);
         
         
     }

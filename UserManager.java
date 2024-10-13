@@ -5,6 +5,7 @@
 package proyecto1_ajedrezchino;
 
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -14,88 +15,73 @@ public class UserManager implements GuardarPlayers {
 
     User[] registrarUsuario;
     String[] ArregloDeUsuario;
-    public static Calendar[] FechaIngreso = new Calendar[50];
-    int puntos = 0;
-    int contador = 0;
+
+   
+   public static int contador = 0;
     public static String[] nombres = new String[50];
     public static String[] contrasenas = new String[50];
+    public static String[] fechaIngreso = new String[50];
+    public static int[] puntosUsuario = new int[100]; 
+
     public static boolean[] Activas = new boolean[50];
 
-    public UserManager() {
-        registrarUsuario = new User[50];
-
-    }
-
-    @Override
-    public boolean ConfirmarNombre(String nombre) {
-        for (User user : registrarUsuario) {
-            if (user != null) {
-                if (nombre.equals(user.getNombre())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean ConfirmarContrasena(String nombre, String Contrasena) {
-        for (int pase = 0; pase < registrarUsuario.length; pase++) {
-            if (registrarUsuario[pase] != null) {
-                if (nombre.equals(registrarUsuario[pase].nombre) && Contrasena.equals(registrarUsuario[pase].contrasena)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    public boolean AgregarUsuario(String nombre, String Contrasena,Calendar fecha) {
-        if (contador >= 50) {
+  @Override
+    public boolean AgregarUsuario(String NombreUsuario, String Contrasena, String FechaIngreso) {
+        
+        if(contador >= 50){
             return false;
         }
-
-        for (int agrega = 0; agrega < contador; agrega++) {
-            if (nombres[agrega] != null && nombres[agrega].equals(nombre)) {
-                return false;
-            }
-        }
-
-        nombres[contador] = nombre;
+        
+        for (int i = 0; i < contador; i++) {
+          if(nombres[i] != null && nombres[i].equals(NombreUsuario)){
+              return false;
+          }
+      }
+        
+        nombres[contador] = NombreUsuario;
         contrasenas[contador] = Contrasena;
-        Activas[contador] = true;
-        FechaIngreso[contador] = fecha;
-        // aqui creo un objeto User con 0 puntos
-        User nuevoUsuario = new User(nombre,Contrasena,0);
-        registrarUsuario[contador] = nuevoUsuario;
+        fechaIngreso[contador] =  FechaIngreso;
+        puntosUsuario[contador] = 0;
         contador++;
+        
         return true;
+        
+    }
+    
+
+    @Override
+    public boolean IniciarSesion(String nombre, String Contrasena) {
+        for (int aceptar = 0; aceptar < contador; aceptar++) {
+
+            if (nombres[aceptar].equals(nombre) && contrasenas[aceptar].equals(Contrasena)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
-    public String[] ListaDeUsuario(String nombre) {
-        int guardar = 0;
-        for (int listar = 0; listar < registrarUsuario.length; listar++) {
-            if (registrarUsuario[listar] != null && !nombre.equals(registrarUsuario[listar].nombre)) {
-                ArregloDeUsuario[guardar] = registrarUsuario[listar].nombre;
-                guardar++;
+    @Override
+    public boolean ExisteUsuario(String Nombre) {
+
+        for (int exis = 0; exis < contador; exis++) {
+            if (nombres[exis].equals(Nombre)) {
+                return true;
             }
         }
-        return ArregloDeUsuario;
+        return false;
+
     }
 
-    public void Puntos(String nombre) {
-        for (User user : registrarUsuario) {
-            if (user != null) {
-                if (nombre.equals(user.getNombre())) {
-                    puntos += 3;
-                    user.setPuntos(puntos);
-                }
+       public void Puntos(String nombre) {
+        for (int i = 0; i < contador; i++) {
+            if (nombres[i] != null && nombres[i].equals(nombre)) {
+                puntosUsuario[i] += 3;
             }
         }
     }
 
-    public Calendar[] getFechaIngreso() {
-        return FechaIngreso;
-    }
+
+       
 
 }

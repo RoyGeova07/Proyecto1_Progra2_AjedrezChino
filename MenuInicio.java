@@ -15,21 +15,21 @@ import java.awt.event.ActionListener;
  * @author royum
  */
 public class MenuInicio extends JFrame {
-    
-   
+
+    MenuInicio menu;
     UserManager usuarios;
+    private GuardarPlayers guardarplayers;
     public String registrar;
     public ArrayList<String> logeados = new ArrayList<>();
-    
+
     private JPanel PanelMenu;
     private JButton BotonDeLog;
     private JButton BotonDeCrearPlayer;
     private JButton BotonDeSalida;
-    
-    
+
     public MenuInicio() {
 
-        usuarios = new UserManager();
+        guardarplayers = new UserManager();
 
         setTitle("Menu Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,67 +37,59 @@ public class MenuInicio extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
 
-        // Crear el panel
+        // Crear el panel   
         PanelMenu = new JPanel();
         PanelMenu.setLayout(null); // Uso de layout absoluto
         PanelMenu.setBackground(Color.red);
 
-        BotonDeLog = new JButton("Iniciar Sesión");
+        BotonDeLog = new JButton("Iniciar Sesion");
         BotonDeLog.setBounds(150, 50, 200, 40); // Posición y tamaño del botón
         BotonDeLog.setBackground(Color.BLUE);
-        PanelMenu.add(BotonDeLog); 
+        PanelMenu.add(BotonDeLog);
 
         BotonDeCrearPlayer = new JButton("Crear Usuario");
-        BotonDeCrearPlayer.setBounds(150, 110, 200, 40); 
+        BotonDeCrearPlayer.setBounds(150, 110, 200, 40);
         BotonDeCrearPlayer.setBackground(Color.ORANGE);
         PanelMenu.add(BotonDeCrearPlayer);
 
         BotonDeSalida = new JButton("Salir");
-        BotonDeSalida.setBounds(150, 170, 200, 40); 
+        BotonDeSalida.setBounds(150, 170, 200, 40);
         BotonDeSalida.setBackground(Color.GREEN);
         PanelMenu.add(BotonDeSalida);
 
         // Añadir el panel al JFrame
         add(PanelMenu);
-        
-        
-        
-        
+
         setVisible(true);
-       
-        BotonDeLog.addActionListener(new ActionListener(){
+
+        BotonDeLog.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LogIn LogInxd  = new LogIn();
+                LogIn LogInxd = new LogIn(guardarplayers);
                 dispose();
             }
         });
-        
-          BotonDeCrearPlayer.addActionListener(new ActionListener(){
+
+        BotonDeCrearPlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CrearPlayer crearplayerxd  = new CrearPlayer();
+                CrearPlayer crearplayerxd = new CrearPlayer(guardarplayers);
                 setVisible(false);
             }
         });
-          
-          BotonDeSalida.addActionListener(new ActionListener(){
+
+        BotonDeSalida.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        
+
     }
-    
-    
-    
-    
-    
 
     public static void main(String[] args) {
         // Iniciar la interfaz
         MenuInicio menu = new MenuInicio();
-       
+
     }
 }

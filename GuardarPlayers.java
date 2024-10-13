@@ -10,7 +10,8 @@ package proyecto1_ajedrezchino;
  */
 public interface GuardarPlayers {
     
-    boolean ConfirmarNombre(String nombre);
-    boolean ConfirmarContrasena(String nombre,String Contrasena);
+    boolean AgregarUsuario(String NombreUsuario,String Contrasena, String FechaIngreso);
+    boolean IniciarSesion(String nombre,String Contrasena);
+    boolean ExisteUsuario(String nombre);
     
 }

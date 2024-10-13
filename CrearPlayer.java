@@ -15,17 +15,22 @@ import javax.swing.*;
  * @author royum
  */
 public class CrearPlayer extends JFrame {
-    
-     MenuPrincipal menu;
+
+    public static MenuPrincipal menu;
     private JTextField TextoNombre;
     private JPasswordField Textocontrasena;
     private JTextField fechaIngresoField; // Campo para mostrar la fecha generada
     private String UsuarioActual;
     private Calendar fechaActual;  // Almacena la fecha actual generada
     private UserManager userManager;  // Instancia de UserManager
+    
+    private GuardarPlayers guardarplayers;
 
-    public CrearPlayer() {
+    public CrearPlayer(GuardarPlayers guardarplayers) {
+        this.guardarplayers = guardarplayers;
 
+        MenuPrincipal menu;
+        
         setTitle("Crear Jugador");
         setSize(600, 400);
         setResizable(false);
@@ -65,7 +70,6 @@ public class CrearPlayer extends JFrame {
         fechaIngresoField.setEditable(false);  // No se puede editar directamente
         PanelMenu.add(fechaIngresoField);
 
-       
         JButton GenerarFecha = new JButton("Generar Fecha");
         GenerarFecha.setBackground(Color.cyan);
         GenerarFecha.setBounds(130, 240, 150, 40);
@@ -112,39 +116,50 @@ public class CrearPlayer extends JFrame {
         add(PanelMenu);
         setVisible(true);
 
-       
         userManager = new UserManager();
     }
 
     private void ACCION() {
-        String nombre = TextoNombre.getText();
-        String contrasena = Textocontrasena.getText();
+    String nombre = TextoNombre.getText().trim();
+    String contrasena = Textocontrasena.getText().trim();
 
-        
-        if (nombre.isEmpty() || contrasena.isEmpty() || fechaActual == null) {
-            JOptionPane.showMessageDialog(null, "Todos los campos deben ser completados y la fecha debe ser generada.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        
-        if (contrasena.length() != 5) {
-            JOptionPane.showMessageDialog(null, "La contraseña debe tener exactamente 5 caracteres.", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        
-        if (userManager.AgregarUsuario(nombre, contrasena, fechaActual)) {
-            JOptionPane.showMessageDialog(null, "Usuario agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            TextoNombre.setText("");
-            Textocontrasena.setText("");
-            fechaIngresoField.setText("");
-            fechaActual = null;  
-        } else {
-            JOptionPane.showMessageDialog(null, "El usuario ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    // Verificar si los campos están completos
+    if (nombre.isEmpty() || contrasena.isEmpty() || fechaActual == null) {
+        JOptionPane.showMessageDialog(null, "Todos los campos deben ser completados y la fecha debe ser generada.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
     }
 
-    public static void main(String[] args) {
-        new CrearPlayer();
+    // Verificar si la contraseña tiene 5 caracteres
+    if (contrasena.length() != 5) {
+        JOptionPane.showMessageDialog(null, "La contraseña debe tener exactamente 5 caracteres.", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
     }
+
+    // Verificar si el usuario ya existe
+    if (guardarplayers.ExisteUsuario(nombre)) {
+        JOptionPane.showMessageDialog(null, "El usuario ya existe. Por favor, elija otro nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+        return; // Evitar que el usuario sea creado de nuevo
+    }
+
+    // Si el usuario no existe, proceder a crearlo
+    String fechaIngreso = fechaIngresoField.getText();
+    System.out.println("Creando usuario: " + nombre); // Depuración
+
+    if (guardarplayers.AgregarUsuario(nombre, contrasena, fechaIngreso)) {
+        JOptionPane.showMessageDialog(null, "Usuario " + nombre + " creado exitosamente. Bienvenido", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        // Mostrar un mensaje de error en caso de que no se pueda agregar el usuario
+        JOptionPane.showMessageDialog(null, "Error al crear el usuario. Inténtalo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Limpiar los campos de entrada después de la creación
+    TextoNombre.setText("");
+    Textocontrasena.setText("");
+    fechaIngresoField.setText("");
+    fechaActual = null;
+
+    // Abrir el menú principal
+    MenuPrincipal entrar = new MenuPrincipal();
+    dispose();
+}
 }
