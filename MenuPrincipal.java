@@ -14,11 +14,11 @@ import java.awt.event.*;
  */
 public class MenuPrincipal extends JFrame {
 //----------INSTANCIAS----------------------------------------------------------------------------------------------------------------------------
+
     UserManager usuarios;
     MenuInicio menuInicio;
 //------------------------------------------------------------------------------------------------------------------------------------------------
 
-    
 //-----BOTONES PRINCIPALES------------------------------------------------------------------------------------------------------------------------
     private JPanel PanelPrincipal;
     private JButton JUGARXIANGQI;
@@ -26,23 +26,22 @@ public class MenuPrincipal extends JFrame {
     private JButton Reportes;
     private JButton LogOut;
 //------------------------------------------------------------------------------------------------------------------------------------------------
-    
-    
+
 //--------------GUARDAR PLAYERS-------------------------------------------------------------------------------------------------------------------
     private GuardarPlayers guardarplayers;
     private static final int MAX_JUGADORES = 100;
     private static int numJugadores = 0;
-    private  User JugadorLogueado;   // Mantiene una referencia al jugador que ha iniciado sesion en el sistema
+    private static User[] jugadores = new User[MAX_JUGADORES];
+    private User JugadorLogueado;   // Mantiene una referencia al jugador que ha iniciado sesion en el sistema
     private UserManager usermanager;
 //------------------------------------------------------------------------------------------------------------------------------------------------
-    
-    
+
 //------------FRAME PRINCIPAL CONST---------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------
-    public MenuPrincipal(User usuario) {
-        
+    public MenuPrincipal(User usuario, UserManager usermanager) {
+
         this.JugadorLogueado = usuario;
-        
+        this.usermanager = usermanager;
 
         setTitle("Menu Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,6 +117,7 @@ public class MenuPrincipal extends JFrame {
     }
 //---------------FIN DE FRAME PRINCIPAL-----------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------
+
     public void MostrarNuevaPartida() {
 
         this.getContentPane().removeAll();
@@ -306,21 +306,19 @@ public class MenuPrincipal extends JFrame {
         this.repaint();
 
     }
-    
+
 //---------INFORMACION JUAGADOR-------------------------------------------------------------------------------------------------------------------------
-    public void MostrarInformacionJugador(){
-        
-        
-        
-        String Mensaje = "Nombre de usuario: "+JugadorLogueado.getNombre() + "\n"
+    public void MostrarInformacionJugador() {
+
+        String Mensaje = "Nombre de usuario: " + JugadorLogueado.getNombre() + "\n"
                 + "Puntuacion: " + JugadorLogueado.getPuntos() + "\n"
                 + "Fecha creacion cuenta: " + JugadorLogueado.getFormattedFechaIngreso() + "\n"
                 + "Estado" + (JugadorLogueado.isActivo() ? "Activo" : "Inactivo");
-        
-        JOptionPane.showMessageDialog(MenuPrincipal.this, Mensaje," Informacion del jugador ",JOptionPane.INFORMATION_MESSAGE);
-        
+
+        JOptionPane.showMessageDialog(MenuPrincipal.this, Mensaje, " Informacion del jugador ", JOptionPane.INFORMATION_MESSAGE);
+
     }
-    
+
 //--------CAMABIAR CONTRASEÑA---------------------------------------------------------------------------------------------------------------------------
     public void MostrarCambiarContrasena() {
 
@@ -334,7 +332,7 @@ public class MenuPrincipal extends JFrame {
 
         JLabel EtiquetaConfirmarContraseña = new JLabel("Confirmar Nueva Contraseña:");
         JPasswordField TextoConfirmarContraseña = new JPasswordField();
-        
+
         PanelContrasena.add(EtiquetaContrasena);
         PanelContrasena.add(TextoContrasenaActual);
         PanelContrasena.add(EtiquetaNuevaContraseña);
@@ -345,75 +343,60 @@ public class MenuPrincipal extends JFrame {
         // aqui un cuadro para cambiar de contra
         int resultado = JOptionPane.showConfirmDialog(MenuPrincipal.this, PanelContrasena, "Cambiar Contraseña", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (resultado == JOptionPane.OK_OPTION) {
-            
+
             String ContrasenaActual = new String(TextoContrasenaActual.getPassword());
-            String NuevaContrasena = new String (TextoNuevaContraseña.getPassword());  
+            String NuevaContrasena = new String(TextoNuevaContraseña.getPassword());
             String ConfirmarContrasena = new String(TextoConfirmarContraseña.getPassword());
 
-            if(!ContrasenaActual.equals(JugadorLogueado.getContrasena())){
-                
-                JOptionPane.showMessageDialog(MenuPrincipal.this, "La contraseña actual es incorrecta","Error",JOptionPane.ERROR_MESSAGE);
+            if (!ContrasenaActual.equals(JugadorLogueado.getContrasena())) {
+
+                JOptionPane.showMessageDialog(MenuPrincipal.this, "La contraseña actual es incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
-                
+
             }
-            
-            if(!NuevaContrasena.equals(ConfirmarContrasena)){
-                
-                JOptionPane.showMessageDialog(MenuPrincipal.this, "Las contraseñas no coinciden","Error",JOptionPane.ERROR_MESSAGE);
+
+            if (!NuevaContrasena.equals(ConfirmarContrasena)) {
+
+                JOptionPane.showMessageDialog(MenuPrincipal.this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             // se cambia la contrasena
             JugadorLogueado.setContrasena(NuevaContrasena);
-            JOptionPane.showMessageDialog(MenuPrincipal.this, "La contraseña se a cambiado con "+NuevaContrasena,"Exito",JOptionPane.INFORMATION_MESSAGE);
-            
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "La contraseña se a cambiado con " + NuevaContrasena, "Exito", JOptionPane.INFORMATION_MESSAGE);
+
         }
 
     }
-    
-    public void MostrarCerrarCuenta(){
-        
-        int resultado = JOptionPane.showConfirmDialog(MenuPrincipal.this, "¿Estas seguro de que quieres cerrar tu cuenta?","Confirmar cierre de cuenta",JOptionPane.YES_OPTION);
-        if(resultado == JOptionPane.YES_OPTION){
-            // aqui buscamos el indice del jugador en el array de jugadores 
-            User[] Jugadores = usermanager.getUsuarios();
-            int indiceJugador = -1;
-            for (int i = 0; i < numJugadores; i++) {
-                if(Jugadores[i].getNombre().equals(JugadorLogueado.getNombre())){
-                    
-                    indiceJugador=i;
-                    break;
-                    
-                }
-                
-            }
-            // aqui se verifica si el jugador fu encotradro
-            if(indiceJugador != -1){
-                
-                // aqui se mueve los jugadores siguientes para cubrir el espacio del jugador eliminado
-                for (int mover = indiceJugador; mover < numJugadores-1; mover++) {
-                    Jugadores[mover] = Jugadores[mover+1];// mover los jugadores
-                }
-                
-                // aqui se elimina la ultima referencia
-                Jugadores[numJugadores-1]=null;
-                numJugadores--;// se redue el numero de jugadores
-                JugadorLogueado=null; // aqui se limpia la referencia al jugador actual
-                
-                JOptionPane.showMessageDialog(MenuPrincipal.this, "La cuenta a sido eliminada con exito","Exito",JOptionPane.INFORMATION_MESSAGE);
+
+    public void MostrarCerrarCuenta() {
+
+        String ContrasenaIngresada = JOptionPane.showInputDialog(null, "Ingrese su contraseña, para confirmar la eliminacion de la cuenta: ", "EscribirContraseña");
+
+        // aquise verifica si la contrasena es correcta
+        if (ContrasenaIngresada != null && ContrasenaIngresada.equals(JugadorLogueado.getContrasena())) {
+
+            //eliminar el usaurio
+            if (usermanager.EliminarUsuario(JugadorLogueado, 0)) {
+
+                JOptionPane.showMessageDialog(MenuPrincipal.this, "Cuenta Eliminada exitosamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
                 MenuInicio m = new MenuInicio();
                 m.setVisible(true);
-                dispose();
-                
+
             } else {
-                JOptionPane.showMessageDialog(MenuPrincipal.this, "Error: jugador no encontrador","Error",JOptionPane.ERROR_MESSAGE);
+
+                JOptionPane.showMessageDialog(MenuPrincipal.this, "Error al eliminar la cuenta", "Error", JOptionPane.ERROR_MESSAGE);
+
             }
-            
-        } else{
-            JOptionPane.showMessageDialog(MenuPrincipal.this, "Opcion cancelada","Cancelado",JOptionPane.ERROR_MESSAGE);
+
+        } else {
+
+            JOptionPane.showMessageDialog(MenuPrincipal.this, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+
         }
-        
+
     }
 
 }
-

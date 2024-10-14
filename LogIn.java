@@ -79,6 +79,8 @@ public class LogIn extends JFrame {
         add(PanelMenu);
         setVisible(true);
 
+        usu = new UserManager(); // sin crear este objeto, no puedo borrar cuenta, me dice JugadorLogueado null
+        
     }
 
     private void INICIAR() {
@@ -105,7 +107,7 @@ public class LogIn extends JFrame {
         
 
         JOptionPane.showMessageDialog(null, "Inicio Sesion exitoso","Exito",JOptionPane.INFORMATION_MESSAGE);
-        MenuPrincipal menu = new MenuPrincipal(usuarioLogueado);
+        MenuPrincipal menu = new MenuPrincipal(usuarioLogueado,usu);
         menu.setVisible(true);
         dispose();
 

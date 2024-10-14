@@ -29,7 +29,6 @@ public class CrearPlayer extends JFrame {
 
     public CrearPlayer(GuardarPlayers guardarplayers) {
         this.guardarplayers = guardarplayers;
-        
 
         MenuPrincipal menu;
 
@@ -118,7 +117,7 @@ public class CrearPlayer extends JFrame {
         add(PanelMenu);
         setVisible(true);
 
-        userManager = new UserManager();
+        userManager = new UserManager(); // sin esta mamada no borro cuenta, si no creo este objeto no puedo borrar cuenta
     }
 
     private void ACCION() {
@@ -152,9 +151,9 @@ public class CrearPlayer extends JFrame {
             // Abrir el menú principal
             // obtener usuario ya creado
             User usuarioCreado = guardarplayers.IniciarSesion(nombre, contrasena);
-        MenuPrincipal entrar = new MenuPrincipal(usuarioCreado);
-        entrar.setVisible(true);
-        dispose();
+            MenuPrincipal entrar = new MenuPrincipal(usuarioCreado, userManager);
+            entrar.setVisible(true);
+            dispose();
         } else {
             // Mostrar un mensaje de error en caso de que no se pueda agregar el usuario
             JOptionPane.showMessageDialog(null, "Error al crear el usuario. Inténtalo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -166,6 +165,5 @@ public class CrearPlayer extends JFrame {
         fechaIngresoField.setText("");
         fechaActual = null;
 
-        
     }
 }
