@@ -16,56 +16,46 @@ public class UserManager implements GuardarPlayers {
     User[] registrarUsuario;
     String[] ArregloDeUsuario;
 
-   
-   public static int contador = 0;
-    public static String[] nombres = new String[50];
-    public static String[] contrasenas = new String[50];
-    public static String[] fechaIngreso = new String[50];
-    public static int[] puntosUsuario = new int[100]; 
-
-    public static boolean[] Activas = new boolean[50];
-
-  @Override
-    public boolean AgregarUsuario(String NombreUsuario, String Contrasena, String FechaIngreso) {
-        
-        if(contador >= 50){
-            return false;
-        }
-        
-        for (int i = 0; i < contador; i++) {
-          if(nombres[i] != null && nombres[i].equals(NombreUsuario)){
-              return false;
-          }
-      }
-        
-        nombres[contador] = NombreUsuario;
-        contrasenas[contador] = Contrasena;
-        fechaIngreso[contador] =  FechaIngreso;
-        puntosUsuario[contador] = 0;
-        contador++;
-        
-        return true;
-        
-    }
-    
+    public static int contador = 0;
+    private static User[] usuarios = new User[50];
 
     @Override
-    public boolean IniciarSesion(String nombre, String Contrasena) {
+    public boolean AgregarUsuario(String NombreUsuario, String Contrasena, Calendar FechaIngreso) {
+
+        if (contador >= 50) {
+            return false;
+        }
+
+        for (int i = 0; i < contador; i++) {
+            if (usuarios[i] != null && usuarios[i].getNombre().equals(NombreUsuario)) {
+                return false;
+            }
+        }
+
+        usuarios[contador] = new User(NombreUsuario, Contrasena, 0, FechaIngreso);
+        contador++;
+
+        return true;
+
+    }
+
+    @Override
+    public User IniciarSesion(String nombre, String Contrasena) {
         for (int aceptar = 0; aceptar < contador; aceptar++) {
 
-            if (nombres[aceptar].equals(nombre) && contrasenas[aceptar].equals(Contrasena)) {
-                return true;
+            if (usuarios[aceptar].getNombre().equals(nombre) && usuarios[aceptar].getContrasena().equals(Contrasena)) {
+                return usuarios[aceptar];
             }
 
         }
-        return false;
+        return null;
     }
 
     @Override
     public boolean ExisteUsuario(String Nombre) {
 
         for (int exis = 0; exis < contador; exis++) {
-            if (nombres[exis].equals(Nombre)) {
+            if (usuarios[exis].getNombre().equals(Nombre)) {
                 return true;
             }
         }
@@ -73,15 +63,8 @@ public class UserManager implements GuardarPlayers {
 
     }
 
-       public void Puntos(String nombre) {
-        for (int i = 0; i < contador; i++) {
-            if (nombres[i] != null && nombres[i].equals(nombre)) {
-                puntosUsuario[i] += 3;
-            }
-        }
+    public User[] getUsuarios() {
+        return usuarios;
     }
-
-
-       
 
 }

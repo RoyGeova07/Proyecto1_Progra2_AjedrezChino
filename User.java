@@ -4,7 +4,7 @@
  */
 package proyecto1_ajedrezchino;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -16,16 +16,22 @@ public class User {
     public String contrasena;
     public int puntos;
     public boolean Activo;
-    public Date FechaIngreso;
+    public Calendar FechaIngreso;
 
-    public User(String nombre, String contrasena,int puntos) {
+    public User(String nombre, String contrasena,int puntos,Calendar FechaIngreso) {
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.puntos = puntos;
         this.Activo = true;
+        this.FechaIngreso = FechaIngreso;
+    }
+
+    public Calendar getFechaIngreso() {
+        return FechaIngreso;
     }
     
 
+    
     public String getNombre() {
         return nombre;
     }
@@ -56,4 +62,10 @@ public class User {
     
     
     
+    public String getFormattedFechaIngreso() {
+        int year = FechaIngreso.get(Calendar.YEAR);
+        int month = FechaIngreso.get(Calendar.MONTH)+1; // Enero es 0
+        int day = FechaIngreso.get(Calendar.DAY_OF_MONTH);
+        return day + "/" + month + "/" + year;
+    }
 }

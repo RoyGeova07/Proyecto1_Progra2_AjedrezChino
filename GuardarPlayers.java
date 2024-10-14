@@ -4,14 +4,16 @@
  */
 package proyecto1_ajedrezchino;
 
+import java.util.Calendar;
+
 /**
  *
  * @author royum
  */
 public interface GuardarPlayers {
     
-    boolean AgregarUsuario(String NombreUsuario,String Contrasena, String FechaIngreso);
-    boolean IniciarSesion(String nombre,String Contrasena);
+    boolean AgregarUsuario(String NombreUsuario,String Contrasena, Calendar FechaIngreso);
+    User IniciarSesion(String nombre,String Contrasena);
     boolean ExisteUsuario(String nombre);
     
 }

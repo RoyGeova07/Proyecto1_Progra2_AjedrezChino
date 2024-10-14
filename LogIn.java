@@ -17,6 +17,7 @@ public class LogIn extends JFrame {
 
     UserManager usu;
     public MenuInicio menu;
+    User usuario;
     
     private GuardarPlayers guardarplayers;
 
@@ -95,13 +96,16 @@ public class LogIn extends JFrame {
             return;
         }
         
-        if(!guardarplayers.IniciarSesion(nombre, Contrasena)){
-            JOptionPane.showMessageDialog(null, "Contraseña Incorrecta", "Error",JOptionPane.ERROR_MESSAGE);
+        User usuarioLogueado = guardarplayers.IniciarSesion(nombre, Contrasena);
+        
+        if(usuarioLogueado == null){
+            JOptionPane.showMessageDialog(null, "Contraseña incorrecta","Error",JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
 
         JOptionPane.showMessageDialog(null, "Inicio Sesion exitoso","Exito",JOptionPane.INFORMATION_MESSAGE);
-        MenuPrincipal menu = new MenuPrincipal();
+        MenuPrincipal menu = new MenuPrincipal(usuarioLogueado);
         menu.setVisible(true);
         dispose();
 
