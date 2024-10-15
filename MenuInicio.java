@@ -86,10 +86,4 @@ public class MenuInicio extends JFrame {
         });
 
     }
-
-    public static void main(String[] args) {
-        // Iniciar la interfaz
-        MenuInicio menu = new MenuInicio();
-
-    }
 }

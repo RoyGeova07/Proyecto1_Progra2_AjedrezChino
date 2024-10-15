@@ -100,6 +100,8 @@ public class MenuPrincipal extends JFrame {
         Reportes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
+                MostrarReportes();
 
             }
         });
@@ -136,60 +138,8 @@ public class MenuPrincipal extends JFrame {
         BotonNuevaPartida.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-//
-//                if (numJugadores > 1) {
-//                    String[] nombresDeJugadores = new String[numJugadores - 1];
-//                    int index = 0;
-//
-//                    // for que recorre los nombres de los usuarios
-//                    for (int nameJuga = 0; nameJuga < numJugadores; nameJuga++) {
-//                        if (!Jugadores[nameJuga].getNombre().equals(JugadorLogueado.getNombre())) {
-//                            nombresDeJugadores[index++] = Jugadores[nameJuga].getNombre();
-//                        }
-//                    }
-//
-//                    // Aquí se selecciona el oponente
-//                    String OponenteSeleccionar = (String) JOptionPane.showInputDialog(
-//                            MenuPrincipal.this,
-//                            "Selecciona un oponente",
-//                            "Seleccionar un oponente",
-//                            JOptionPane.QUESTION_MESSAGE,
-//                            null,
-//                            nombresDeJugadores,
-//                            nombresDeJugadores[0]
-//                    );
-//
-//                    if (OponenteSeleccionar == null) {
-//                        return;
-//                    }
-//
-//                    // Se busca el oponente seleccionado
-//                    User oponente = null;
-//                    for (int buscar = 0; buscar < numJugadores; buscar++) {
-//                        if (Jugadores[buscar].getNombre().equals(OponenteSeleccionar)) {
-//                            oponente = Jugadores[buscar];
-//                            break;
-//                        }
-//                    }
-//
-//                    if (oponente != null) {
-//                        // IniciarPartida(frame, JugadorLogueado, oponente); // HACER ESTA FUNCION
-//                    } else {
-//                        JOptionPane.showMessageDialog(MenuPrincipal.this, "Oponente no válido");
-//                    }
-//
-//                } else {
-//                    JOptionPane.showMessageDialog(MenuPrincipal.this, "No hay suficientes jugadores para iniciar una partida.");
-//                    int respuesta = JOptionPane.showConfirmDialog(MenuPrincipal.this, "Desea crear otro jugador?", "Faltan jugadores", JOptionPane.YES_OPTION);
-//
-//                    if (respuesta == JOptionPane.YES_OPTION) {
-//                        CrearPlayer crear = new CrearPlayer(guardarplayers);
-//                        dispose();
-//                    } else {
-//                        JOptionPane.showMessageDialog(MenuPrincipal.this, "No es posible iniciar la partida sin otro jugador", "Error", JOptionPane.INFORMATION_MESSAGE);
-//                    }
-//
-//                }
+
+                MostrarJugadoresDisponibles();
 
             }
 
@@ -224,6 +174,75 @@ public class MenuPrincipal extends JFrame {
         this.revalidate();
         this.repaint();
 
+    }
+    
+    private void MostrarJugadoresDisponibles(){
+        
+        User[] jugadores = usermanager.getUsuarios();
+        int numJugadores=0;
+        
+        // aqui se cuenta a todos los jugadores, excluyendo al jugador logeuado
+        for (User jugador : jugadores) {
+            
+            if(jugador != null && !jugador.equals(JugadorLogueado)){
+                
+                numJugadores++;
+                
+            }
+            
+        }
+        
+        // aqui se verifica si hay jugadores disponibles
+        if(numJugadores <1){
+            
+            JOptionPane.showMessageDialog(null, "No hay suficientes jugadores para iniciar la partida. Por favor cree otro jugador","Informacion",JOptionPane.INFORMATION_MESSAGE);
+            return;
+            
+        }
+        
+        
+        // si hay jugadores disponibles, se creara la ventana
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        
+        JLabel label = new JLabel("Selecciona un jugador para iniciar la partida");
+        panel.add(label);
+        
+        JComboBox<String> comboJugadores = new JComboBox<>();
+        comboJugadores.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        // aqui se agregan a los jugadores 
+        for (User jugadore : jugadores) {
+            
+            if(jugadore != null && !jugadore.equals(JugadorLogueado)){
+                
+                comboJugadores.addItem(jugadore.getNombre());
+                
+            }
+            
+        }
+        panel.add(comboJugadores);
+        
+        // boton de iniciar 
+        JButton iniciar = new JButton("Iniciar partida");
+        iniciar.setBackground(Color.red);
+        iniciar.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        iniciar.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+
+                String jugadorSeleccionado = (String) comboJugadores.getSelectedItem();
+                JOptionPane.showMessageDialog(null, "Iniciando partida con: "+ jugadorSeleccionado);
+                
+                // FUNCION PARA INICIAR PARTIDAAAAA
+
+            }
+
+        });
+        panel.add(iniciar);
+        
+        JOptionPane.showMessageDialog(null,panel, "Jugadores disponibles",JOptionPane.PLAIN_MESSAGE);
+        
     }
 
     public void MostrarMiCuenta() {
@@ -397,6 +416,73 @@ public class MenuPrincipal extends JFrame {
 
         }
 
+    }
+    
+    public void MostrarReportes(){
+        
+        this.getContentPane().removeAll();
+        this.setSize(800, 600);
+        
+        JPanel panelReportes = new JPanel();
+        panelReportes.setLayout(new GridBagLayout());
+        GridBagConstraints  gbc = new GridBagConstraints();
+        gbc.insets= new Insets(10,10,10,10);
+        gbc.gridx=0;
+        gbc.gridy=0;
+        
+        JButton BotonRanking = new JButton("RANKING JUGADORES");
+        BotonRanking.setBackground(Color.GREEN);
+        BotonRanking.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent e){
+                
+                
+                
+            }
+            
+        });
+        panelReportes.add(BotonRanking,gbc);
+        gbc.gridy++;
+        
+        JButton BotonUltimosJuegos = new JButton("ULTIMAS PARTIDAS");
+        BotonUltimosJuegos.setBackground(Color.orange);
+        BotonUltimosJuegos.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent e){
+                
+                
+                
+            }
+            
+        });
+        panelReportes.add(BotonUltimosJuegos,gbc);
+        gbc.gridy++;
+        
+        JButton Volver = new JButton("VOLVER");
+        Volver.setBackground(Color.MAGENTA);
+        Volver.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent e){
+                
+                MenuPrincipal.this.getContentPane().removeAll();
+                MenuPrincipal.this.getContentPane().add(PanelPrincipal);
+                MenuPrincipal.this.revalidate();
+                MenuPrincipal.this.repaint();
+                
+                
+            }
+            
+        });
+        panelReportes.setBackground(Color.BLUE);
+        panelReportes.add(Volver,gbc);
+        gbc.gridy++;
+        
+        this.getContentPane().add(panelReportes);
+        this.revalidate();
+        this.repaint();
+        
+        
+        
     }
 
 }
