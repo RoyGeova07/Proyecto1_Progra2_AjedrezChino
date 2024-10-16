@@ -88,7 +88,6 @@ public class CrearPlayer extends JFrame {
         });
         PanelMenu.add(GenerarFecha);
 
-        // Botón para crear el jugador
         JButton Crear = new JButton("Crear Player");
         Crear.setBackground(Color.magenta);
         Crear.setBounds(320, 240, 120, 40);
@@ -100,7 +99,6 @@ public class CrearPlayer extends JFrame {
         });
         PanelMenu.add(Crear);
 
-        // Botón para regresar al menú anterior
         JButton Regresar = new JButton("Regresar");
         Regresar.setBackground(Color.orange);
         Regresar.setBounds(320, 300, 120, 40);
@@ -124,9 +122,8 @@ public class CrearPlayer extends JFrame {
         String nombre = TextoNombre.getText().trim();
         String contrasena = Textocontrasena.getText().trim();
 
-        // Verificar si los campos están completos
         if (nombre.isEmpty() || contrasena.isEmpty() || fechaActual == null) {
-            JOptionPane.showMessageDialog(null, "Todos los campos deben ser completados y la fecha debe ser generada.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -159,7 +156,7 @@ public class CrearPlayer extends JFrame {
             JOptionPane.showMessageDialog(null, "Error al crear el usuario. Inténtalo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Limpiar los campos de entrada después de la creación
+        // aqui se limpia despues de ingresar los datos
         TextoNombre.setText("");
         Textocontrasena.setText("");
         fechaIngresoField.setText("");

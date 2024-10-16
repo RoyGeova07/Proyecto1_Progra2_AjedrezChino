@@ -176,6 +176,7 @@ public class MenuPrincipal extends JFrame {
 
     }
     
+// ----AQUI SE MUESTRAN LOS JUGADORES DISPONIBLES-----------------------------------------------------------------------------------------------
     private void MostrarJugadoresDisponibles(){
         
         User[] jugadores = usermanager.getUsuarios();
@@ -231,10 +232,16 @@ public class MenuPrincipal extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
 
-                String jugadorSeleccionado = (String) comboJugadores.getSelectedItem();
-                JOptionPane.showMessageDialog(null, "Iniciando partida con: "+ jugadorSeleccionado);
+                String OponenteSeleccionado = (String) comboJugadores.getSelectedItem();
                 
-                // FUNCION PARA INICIAR PARTIDAAAAA
+                if(OponenteSeleccionado != null){
+                    
+                    // se inicia la partida con el JugadorLogueado y con el oponente seleccionado
+                    IniciarPartida(JugadorLogueado,OponenteSeleccionado);
+                    
+                }
+                
+                
 
             }
 
@@ -244,7 +251,14 @@ public class MenuPrincipal extends JFrame {
         JOptionPane.showMessageDialog(null,panel, "Jugadores disponibles",JOptionPane.PLAIN_MESSAGE);
         
     }
+    
+    private void IniciarPartida(User jugadorLogueado, String oponenteSeleccionado){
+        
+        JOptionPane.showMessageDialog(MenuPrincipal.this, "Iniciando partida entre "+jugadorLogueado.getNombre()+ "VS" +oponenteSeleccionado, "PARTIDA 1VS1",JOptionPane.INFORMATION_MESSAGE);
+        
+    }
 
+//--------AQUI SE MUESTRA KA CUENTA DEL JUGADOR EN SESION------------------------------------------------------------------------------------------------------
     public void MostrarMiCuenta() {
 
         this.getContentPane().removeAll();
@@ -387,7 +401,7 @@ public class MenuPrincipal extends JFrame {
         }
 
     }
-
+//----------------AQUI SE MUESTRA PARA CERRAR LA CUENTA-----------------------------------------------------------------------------------------------------------
     public void MostrarCerrarCuenta() {
 
         String ContrasenaIngresada = JOptionPane.showInputDialog(null, "Ingrese su contraseña, para confirmar la eliminacion de la cuenta: ", "EscribirContraseña");
@@ -418,6 +432,7 @@ public class MenuPrincipal extends JFrame {
 
     }
     
+//------------------------------AQUI SE MUESTRAN LOS REPORTES------------------------------------------------------------------------------------------------------------
     public void MostrarReportes(){
         
         this.getContentPane().removeAll();
@@ -450,7 +465,7 @@ public class MenuPrincipal extends JFrame {
             
             public void actionPerformed(ActionEvent e){
                 
-                
+                // NUEVO PANEL PARA NUEVAS PARTIDAS 
                 
             }
             

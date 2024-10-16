@@ -43,7 +43,7 @@ public class MenuInicio extends JFrame {
         PanelMenu.setBackground(Color.red);
 
         BotonDeLog = new JButton("Iniciar Sesion");
-        BotonDeLog.setBounds(150, 50, 200, 40); // Posición y tamaño del botón
+        BotonDeLog.setBounds(150, 50, 200, 40);     
         BotonDeLog.setBackground(Color.BLUE);
         PanelMenu.add(BotonDeLog);
 
