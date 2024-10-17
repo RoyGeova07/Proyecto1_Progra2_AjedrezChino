@@ -254,7 +254,7 @@ public class MenuPrincipal extends JFrame {
     
     private void IniciarPartida(User jugadorLogueado, String oponenteSeleccionado){
         
-        JOptionPane.showMessageDialog(MenuPrincipal.this, "Iniciando partida entre "+jugadorLogueado.getNombre()+ "VS" +oponenteSeleccionado, "PARTIDA 1VS1",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(MenuPrincipal.this, "Iniciando partida entre "+jugadorLogueado.getNombre()+ " VS " +oponenteSeleccionado, "PARTIDA 1VS1",JOptionPane.INFORMATION_MESSAGE);
         
     }
 
